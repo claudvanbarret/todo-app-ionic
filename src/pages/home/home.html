@@ -6,33 +6,32 @@
 -->
 <ion-header>
   <ion-navbar>
-    <ion-title>home</ion-title>
+    <ion-title>Todo List</ion-title>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content >
-  
-    <ion-list>
-        <ion-item-sliding>
-          <ion-item *ngFor="let todo of todos | async">
-            <h2>{{ todo.description }}</h2>
-          </ion-item>
-          <ion-item-options side="right">
-            <button ion-button color="secondary">
-              <ion-icon name="done-all"></ion-icon>
-              Done
-            </button>
-            <button ion-button color="primary">
-              <ion-icon name="create"></ion-icon>
-              Edit
-            </button>
-          </ion-item-options>
-        </ion-item-sliding>
-      </ion-list>
+<ion-content>
+  <ion-list>
+    <ion-item-sliding *ngFor="let todo of todos | async">
+      <ion-item>
+        <h2 [ngClass]="{'done': todo.done}">{{ todo.description }}</h2>
+      </ion-item>
+      <ion-item-options side="right">
+        <button ion-button color="secondary" (click)="markAsDone(todo)">
+          <ion-icon name="done-all"></ion-icon>
+          Done
+        </button>
+        <button navPush="TodoEditPage" [navParams]="{ todo: todo }" ion-button color="primary">
+          <ion-icon name="create"></ion-icon>
+          Edit
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
 
-  <button ion-button full (click)="goToEdit()">
-    New
-    <ion-icon name="add"></ion-icon>
-  </button>
+  <ion-fab right bottom>
+      <button ion-fab (click)="goToEdit()"><ion-icon name="add"></ion-icon></button>
+  </ion-fab>
+  
 </ion-content>

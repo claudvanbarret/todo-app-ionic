@@ -46,7 +46,17 @@ export class HomePage {
     }
   }
 
-  goToEdit(){
+  goToEdit(): void{
     this.navCtrl.push('TodoEditPage');
+  }
+
+  markAsDone(todo: TodoModel): void{
+    todo.done = true;
+    this.updateTodo(todo);
+  }
+
+  updateTodo(todo): void{
+    this.todoDoc = this.afs.doc<TodoModel>(`todos/${todo.id}`);
+    this.todoDoc.update(Object.assign({}, todo));
   }
 }
