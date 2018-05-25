@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 
 import { 
   AngularFirestore,
@@ -29,6 +29,7 @@ export class HomePage {
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams, 
+    public modalCtrl: ModalController,
     private afs: AngularFirestore) {
     
   }
@@ -58,5 +59,10 @@ export class HomePage {
   updateTodo(todo): void{
     this.todoDoc = this.afs.doc<TodoModel>(`todos/${todo.id}`);
     this.todoDoc.update(Object.assign({}, todo));
+  }
+
+  openModalDelete(todo): void {
+    let deleteModal = this.modalCtrl.create('ModalDeletePage', {todo: todo});
+    deleteModal.present();
   }
 }
