@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 
 import { 
   AngularFirestore,
@@ -29,8 +29,9 @@ export class HomePage {
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams, 
-    public modalCtrl: ModalController,
-    private afs: AngularFirestore) {
+    private afs: AngularFirestore,
+    public alertCtrl: AlertController
+  ) {
     
   }
 
@@ -61,8 +62,28 @@ export class HomePage {
     this.todoDoc.update(Object.assign({}, todo));
   }
 
-  openModalDelete(todo): void {
-    let deleteModal = this.modalCtrl.create('ModalDeletePage', {todo: todo});
-    deleteModal.present();
+  deleteTodo(todo): void {
+    this.todoDoc = this.afs.doc<TodoModel>(`todos/${todo.id}`);
+    this.todoDoc.delete();
+  }
+
+  showDeleteConfirm(todo) {
+    let confirm = this.alertCtrl.create({
+      title: 'Delete',
+      message: 'Are you sure you want to delete this?',
+      buttons: [
+        {
+          text: 'No'
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.deleteTodo(todo);
+          }
+        }
+      ]
+    });
+
+    confirm.present();
   }
 }
