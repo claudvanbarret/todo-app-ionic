@@ -1,0 +1,25 @@
+<!--
+  Generated template for the CategoryPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <button ion-button menuToggle icon-only>
+        <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Categories</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content >
+    <ion-list>
+      <ion-item *ngFor="let category of categories | async">
+          <ion-icon [name]="category.icon" item-start></ion-icon>
+          <h2>{{ category.description }}</h2>
+      </ion-item>
+    </ion-list>
+</ion-content>
