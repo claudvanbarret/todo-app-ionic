@@ -6,6 +6,7 @@ export class TodoModel {
     done: boolean = false;
     createAt: number = Date.now();
     category: CategoryModel;
+    deadline: String = null;
 
     constructor(values: Object = {}){
         Object.keys(this).forEach(key => {

@@ -19,6 +19,7 @@
     <ion-item-sliding *ngFor="let todo of todos | async">
       <ion-item>
         <h2 [ngClass]="{'done': todo.done}">{{ todo.description }}</h2>
+        <p item-end class="deadline">{{ todo.deadline | date:'dd/MM/yyyy' }}</p>
       </ion-item>
       <ion-item-options side="right">
         <button ion-button color="secondary" (click)="markAsDone(todo)">

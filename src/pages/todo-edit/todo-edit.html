@@ -10,21 +10,25 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
-    <ion-list>
-        <ion-item>
-          <ion-label stacked>Description</ion-label>
-          <ion-input type="text" [(ngModel)]="todo.description"></ion-input>
-        </ion-item>
-        <ion-item>
-            <ion-label stacked>Category</ion-label>
-            <ion-select [(ngModel)]="todo.category">
-                <ion-option *ngFor="let category of categories | async" [value]="category">
-                  {{ category.description }}
-                </ion-option>
-            </ion-select>
-          </ion-item>
-    </ion-list>
-    <button ion-button full (click)="save()">
-      Save
-    </button>
+  <ion-list>
+      <ion-item>
+        <ion-label stacked>Description</ion-label>
+        <ion-input type="text" [(ngModel)]="todo.description"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Category</ion-label>
+        <ion-select [(ngModel)]="todo.category">
+            <ion-option *ngFor="let category of categories | async" [value]="category">
+              {{ category.description }}
+            </ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+          <ion-label stacked>Deadline</ion-label>
+          <ion-datetime displayFormat="DD/MM/YYYY" pickerFormat="DD MM YYYY" [(ngModel)]="todo.deadline"></ion-datetime>
+      </ion-item>
+  </ion-list>
+  <button ion-button full (click)="save()">
+    Save
+  </button>
 </ion-content>
