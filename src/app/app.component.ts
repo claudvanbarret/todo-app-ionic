@@ -13,14 +13,14 @@ export class MyApp {
 
   rootPage:any = HomePage;
 
-  pages: Array<{title: string, component: any}>;
+  pages: Array<{title: string, component: any, icon: string}>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
     this.initializeApp();
 
     this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'Categories', component: CategoryPage }
+      { title: 'Home', component: HomePage, icon: 'home' },
+      { title: 'Categories', component: CategoryPage, icon: 'list-box' }
     ];
 
   }
