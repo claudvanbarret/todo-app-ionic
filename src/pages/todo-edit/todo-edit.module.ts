@@ -9,5 +9,8 @@ import { TodoEditPage } from './todo-edit';
   imports: [
     IonicPageModule.forChild(TodoEditPage),
   ],
+  exports:[
+    TodoEditPage
+  ]
 })
 export class TodoEditPageModule {}
