@@ -28,7 +28,6 @@ export class TodoEditPage {
   private todoDoc: AngularFirestoreDocument<TodoModel>;
 
   private categoryCollection: AngularFirestoreCollection<CategoryModel>;
-  private categoryDoc: AngularFirestoreDocument<CategoryModel>;
   categories: Observable<CategoryModel[]>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private afs: AngularFirestore) {

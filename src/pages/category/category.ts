@@ -3,7 +3,6 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { 
   AngularFirestore,
-  AngularFirestoreDocument,
   AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { CategoryModel } from '../../models/category.model';
@@ -23,7 +22,6 @@ import { CategoryModel } from '../../models/category.model';
 export class CategoryPage {
 
   private categoryCollection: AngularFirestoreCollection<CategoryModel>;
-  private categoryDoc: AngularFirestoreDocument<CategoryModel>;
   categories: Observable<CategoryModel[]>;
 
   constructor(
