@@ -12,6 +12,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { MyApp } from './app.component';
 import { LoginPage } from '../pages/login/login';
 import { CategoryPage } from '../pages/category/category';
+import { AuthService } from '../services/auth.service';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { CategoryPage } from '../pages/category/category';
   providers: [
     StatusBar,
     SplashScreen,
+    AuthService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

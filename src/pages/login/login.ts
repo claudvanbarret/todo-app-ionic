@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AuthService } from '../../services/auth.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 /**
@@ -22,7 +22,7 @@ export class LoginPage {
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams, 
-    private afAuth: AngularFireAuth,
+    private auth: AuthService,
     private fb: FormBuilder
   ) { }
 
@@ -39,10 +39,14 @@ export class LoginPage {
 
   signInWithEmailAndPassword() {
     let data = this.loginForm.value;
+
+    let credentials = {
+			email: data.email,
+			password: data.password
+		};
     
-    this.afAuth.auth.signInWithEmailAndPassword(data.email, data.password)
+    this.auth.signInWithEmail(credentials)
       .then(res => { 
-        console.log(res);
         this.navCtrl.setRoot('HomePage');
       });
   }
