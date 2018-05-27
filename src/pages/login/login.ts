@@ -50,4 +50,8 @@ export class LoginPage {
         this.navCtrl.setRoot('HomePage');
       });
   }
+
+  goToSignUpPage(){
+    this.navCtrl.setRoot('SignUpPage');
+  }
 }
