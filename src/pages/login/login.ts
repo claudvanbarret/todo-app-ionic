@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { AuthService } from '../../services/auth.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { ToastController } from 'ionic-angular';
 
 /**
  * Generated class for the LoginPage page.
@@ -23,7 +24,8 @@ export class LoginPage {
     public navCtrl: NavController, 
     public navParams: NavParams, 
     private auth: AuthService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private toastCtrl: ToastController
   ) { }
 
   ionViewWillLoad(): void {
@@ -48,10 +50,23 @@ export class LoginPage {
     this.auth.signInWithEmail(credentials)
       .then(res => { 
         this.navCtrl.setRoot('HomePage');
+      })
+      .catch(error => {
+        this.presentToast(error.message);
       });
   }
 
   goToSignUpPage(){
     this.navCtrl.setRoot('SignUpPage');
+  }
+
+  presentToast(message) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      position: 'top',
+      cssClass: 'toast'
+    });
+    toast.present();
   }
 }
