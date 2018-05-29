@@ -6,6 +6,7 @@ import {
   AngularFirestoreDocument,
   AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
+import { AuthService } from '../../services/auth.service';
 import { TodoModel } from '../../models/todo.model';
 
 /**
@@ -21,7 +22,6 @@ import { TodoModel } from '../../models/todo.model';
   templateUrl: 'home.html',
 })
 export class HomePage {
-  
   private todoCollection: AngularFirestoreCollection<TodoModel>;
   private todoDoc: AngularFirestoreDocument<TodoModel>;
   todos: Observable<TodoModel[]>;
@@ -30,10 +30,9 @@ export class HomePage {
     public navCtrl: NavController, 
     public navParams: NavParams, 
     private afs: AngularFirestore,
-    public alertCtrl: AlertController
-  ) {
-    
-  }
+    public alertCtrl: AlertController,
+    private auth: AuthService
+  ) { }
 
   ionViewDidLoad(): void {
     this.retrieveTodos();
@@ -41,8 +40,12 @@ export class HomePage {
 
   async retrieveTodos(): Promise<void> {
     try {
-      this.todoCollection = this.afs.collection<TodoModel>('todos');
-      this.todos = this.todoCollection.valueChanges();
+      const user = await this.auth.isLoggedIn();
+      if(user){
+        this.todoCollection = this.afs.collection('todos', ref => ref.where('userUid', '==', user.uid));
+        this.todos = this.todoCollection.valueChanges();
+      }
+      
     } catch (error) {
       console.error(error);
     }
@@ -57,14 +60,23 @@ export class HomePage {
     this.updateTodo(todo);
   }
 
-  updateTodo(todo): void{
-    this.todoDoc = this.afs.doc<TodoModel>(`todos/${todo.id}`);
-    this.todoDoc.update(Object.assign({}, todo));
+  async updateTodo(todo){
+    try {
+      this.todoDoc = this.afs.doc<TodoModel>(`todos/${todo.id}`);
+      this.todoDoc.update(Object.assign({}, todo));
+    } catch (error) {
+      console.error(error);
+    }
+    
   }
 
-  deleteTodo(todo): void {
-    this.todoDoc = this.afs.doc<TodoModel>(`todos/${todo.id}`);
-    this.todoDoc.delete();
+  async deleteTodo(todo) {
+    try {
+      this.todoDoc = this.afs.doc<TodoModel>(`todos/${todo.id}`);
+      this.todoDoc.delete();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   showDeleteConfirm(todo) {

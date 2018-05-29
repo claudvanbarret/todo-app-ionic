@@ -2,6 +2,7 @@ import { CategoryModel } from "./category.model";
 
 export class TodoModel {
     id?: string = null;
+    userUid: string = null;
     description: string = null;
     done: boolean = false;
     createAt: number = Date.now();

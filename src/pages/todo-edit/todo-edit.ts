@@ -8,6 +8,7 @@ import {
 import { Observable } from 'rxjs/Observable';
 import { TodoModel } from '../../models/todo.model';
 import { CategoryModel } from '../../models/category.model';
+import { AuthService } from '../../services/auth.service';
 
 /**
  * Generated class for the TodoEditPage page.
@@ -30,7 +31,11 @@ export class TodoEditPage {
   private categoryCollection: AngularFirestoreCollection<CategoryModel>;
   categories: Observable<CategoryModel[]>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private afs: AngularFirestore) {
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams, 
+    private afs: AngularFirestore, 
+    private auth: AuthService) {
   }
 
   ionViewDidLoad(): void {
@@ -42,22 +47,29 @@ export class TodoEditPage {
     this.retrieveCategories();
   }
 
-  save(){
-    if (!this.todo.id) {
-      this.todo.id = this.afs.createId();
-      this.todoCollection = this.afs.collection<TodoModel>('todos');
-      this.todoCollection
-        .doc(this.todo.id)
-        .set(Object.assign({}, this.todo))
-        .then(() => {
-          this.navCtrl.pop();
-        });
-    } else {
-      this.todo.done = false;
-      this.todoDoc = this.afs.doc<TodoModel>(`todos/${this.todo.id}`);
-      this.todoDoc.update(Object.assign({}, this.todo));
-      this.navCtrl.pop();
+  async save(){
+    try {
+      const user = await this.auth.isLoggedIn();
+      if (!this.todo.id) {
+        this.todo.userUid = user.uid;
+        this.todo.id = this.afs.createId();
+        this.todoCollection = this.afs.collection<TodoModel>('todos');
+        this.todoCollection
+          .doc(this.todo.id)
+          .set(Object.assign({}, this.todo))
+          .then(() => {
+            this.navCtrl.pop();
+          });
+      } else {
+        this.todo.done = false;
+        this.todoDoc = this.afs.doc<TodoModel>(`todos/${this.todo.id}`);
+        this.todoDoc.update(Object.assign({}, this.todo));
+        this.navCtrl.pop();
+      }
+    } catch (error) {
+      console.error(error);
     }
+    
   }
 
   async retrieveCategories(): Promise<void> {
