@@ -23,7 +23,7 @@
           </ion-item>
         </ion-list>
         <div padding>
-          <button ion-button color="secondary" block (click)="signUp()">
+          <button ion-button color="secondary" block (click)="signUp()" [disabled]="!signUpForm.valid">
             Sign Up
           </button>
         </div>
