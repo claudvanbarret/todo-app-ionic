@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
 
 import { 
   AngularFirestore,
@@ -24,18 +24,24 @@ import { TodoModel } from '../../models/todo.model';
 export class HomePage {
   private todoCollection: AngularFirestoreCollection<TodoModel>;
   private todoDoc: AngularFirestoreDocument<TodoModel>;
+  private loader: Loading;
   todos: Observable<TodoModel[]>;
-
+  
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams, 
     private afs: AngularFirestore,
     public alertCtrl: AlertController,
-    private auth: AuthService
+    private auth: AuthService,
+    public loadingCtrl: LoadingController
   ) { }
 
   ionViewDidLoad(): void {
-    this.retrieveTodos();
+    this.presentLoading();
+    this.retrieveTodos()
+      .then(() => {
+        this.dismissLoading();
+      });
   }
 
   async retrieveTodos(): Promise<void> {
@@ -45,7 +51,7 @@ export class HomePage {
         this.todoCollection = this.afs.collection('todos', ref => ref.where('userUid', '==', user.uid));
         this.todos = this.todoCollection.valueChanges();
       }
-      
+
     } catch (error) {
       console.error(error);
     }
@@ -97,5 +103,16 @@ export class HomePage {
     });
 
     confirm.present();
+  }
+
+  presentLoading() {
+    this.loader = this.loadingCtrl.create({
+      content: "Please wait...",
+    });
+    this.loader.present();
+  }
+
+  dismissLoading(){
+    this.loader.dismiss();
   }
 }
