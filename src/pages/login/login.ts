@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
 
 import { AuthService } from '../../services/auth.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
@@ -25,11 +25,16 @@ export class LoginPage {
     public navParams: NavParams, 
     private auth: AuthService,
     private fb: FormBuilder,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private menuCtrl: MenuController
   ) { }
 
   ionViewWillLoad(): void {
     this.createFormLogin();
+  }
+
+  ionViewDidEnter(){
+    this.menuCtrl.swipeEnable(false);
   }
 
   createFormLogin(){
@@ -50,6 +55,7 @@ export class LoginPage {
     this.auth.signInWithEmail(credentials)
       .then(res => { 
         this.navCtrl.setRoot('HomePage');
+        this.menuCtrl.swipeEnable(true);
       })
       .catch(error => {
         this.presentToast(error.message);

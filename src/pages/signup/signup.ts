@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
 
 import { AuthService } from '../../services/auth.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -24,10 +24,15 @@ export class SignUpPage {
     public navParams: NavParams,
     private fb: FormBuilder,
     private auth: AuthService,
+    private menuCtrl: MenuController
   ) { }
 
   ionViewWillLoad(): void {
     this.createSignUpLogin();
+  }
+
+  ionViewDidEnter(){
+    this.menuCtrl.swipeEnable(false);
   }
 
   createSignUpLogin(){
@@ -46,7 +51,8 @@ export class SignUpPage {
     
     this.auth.signUp(credentials)
       .then(() => {
-        this.navCtrl.setRoot('HomePage')
+        this.navCtrl.setRoot('HomePage');
+        this.menuCtrl.swipeEnable(true);
       });
 }
 
