@@ -26,7 +26,7 @@
         </ion-item>
       </ion-list>
       <div padding>
-        <button ion-button color="primary" block (click)="signInWithEmailAndPassword()">
+        <button ion-button color="primary" block (click)="signInWithEmailAndPassword()" [disabled]="!loginForm.valid">
           Sign In
         </button>
         <button ion-button color="secondary" block (click)="goToSignUpPage()">
