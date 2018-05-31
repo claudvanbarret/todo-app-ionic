@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController, ToastController } from 'ionic-angular';
 
 import { AuthService } from '../../services/auth.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -24,7 +24,8 @@ export class SignUpPage {
     public navParams: NavParams,
     private fb: FormBuilder,
     private auth: AuthService,
-    private menuCtrl: MenuController
+    private menuCtrl: MenuController,
+    private toastCtrl: ToastController,
   ) { }
 
   ionViewWillLoad(): void {
@@ -38,12 +39,17 @@ export class SignUpPage {
   createSignUpLogin(){
     this.signUpForm = this.fb.group({
 			email: ['', Validators.compose([Validators.required, Validators.email])],
-			password: ['', Validators.compose([Validators.required, Validators.minLength(8)])]
+			password: ['', Validators.compose([Validators.required, Validators.minLength(8)])],
+			confirmPassword: ['', Validators.compose([Validators.required, Validators.minLength(8)])]
 		});
   }
 
   signUp() {
-		let data = this.signUpForm.value;
+    let data = this.signUpForm.value;
+    if(data.password !== data.confirmPassword) {
+      this.presentToast("The passwords you entered don't match");
+      return;
+    }
 		let credentials = {
 			email: data.email,
 			password: data.password
@@ -54,6 +60,16 @@ export class SignUpPage {
         this.navCtrl.setRoot('HomePage');
         this.menuCtrl.swipeEnable(true);
       });
-}
+  }
+
+  presentToast(message) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      position: 'top',
+      cssClass: 'toast'
+    });
+    toast.present();
+  }
 
 }
