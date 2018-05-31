@@ -12,6 +12,12 @@ import { ToastController } from 'ionic-angular';
  * Ionic pages and navigation.
  */
 
+interface Password {
+  type: string;
+  icon: string;
+  show: boolean;
+}
+
 @IonicPage()
 @Component({
   selector: 'page-login',
@@ -19,6 +25,7 @@ import { ToastController } from 'ionic-angular';
 })
 export class LoginPage {
   loginForm: FormGroup;
+  password: Password;
 
   constructor(
     public navCtrl: NavController, 
@@ -30,6 +37,11 @@ export class LoginPage {
   ) { }
 
   ionViewWillLoad(): void {
+    this.password = {
+      type: 'password',
+      icon: 'eye-off',
+      show: false
+    }
     this.createFormLogin();
   }
 
@@ -74,5 +86,21 @@ export class LoginPage {
       cssClass: 'toast'
     });
     toast.present();
+  }
+
+  showHidePassword(){
+    if(!this.password.show){
+      this.password = {
+        type: 'text',
+        icon: 'eye',
+        show: true
+      }
+    } else {
+      this.password = {
+        type: 'password',
+        icon: 'eye-off',
+        show: false
+      }
+    }
   }
 }
