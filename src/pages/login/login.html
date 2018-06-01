@@ -23,7 +23,9 @@
         <ion-item>
           <ion-label stacked>Password</ion-label>
           <ion-input [type]="password.type" formControlName="password"></ion-input>
-          <ion-icon [name]="password.icon" item-end (click)="showHidePassword()" isActive="false"></ion-icon>
+          <button ion-button icon-only item-right clear (click)="showHidePassword()">
+            <ion-icon [name]="password.icon" isActive="false"></ion-icon>
+          </button>
         </ion-item>
       </ion-list>
       <div padding>
