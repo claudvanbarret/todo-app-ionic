@@ -10,6 +10,13 @@
         <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Todo List</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only>
+        <div *ngIf="user$ | async as user">
+          <img class="photo-profile" [src]="user.photoURL" alt="profile photo">
+        </div>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 

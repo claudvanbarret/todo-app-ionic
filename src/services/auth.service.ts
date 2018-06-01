@@ -11,9 +11,7 @@ export class AuthService {
 
 	constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) {
 		afAuth.authState.subscribe(user => {
-			if(user) {
-				this.updateUserData(user);
-			}	
+
 		});
 	}
 
@@ -31,18 +29,26 @@ export class AuthService {
 
 	isLoggedIn() {
 		return this.afAuth.authState.pipe(first()).toPromise();
-	 }
+	}
 
-	private updateUserData(user){
-		const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${user.uid}`);
+	async updateUserData(user){
 
-		const data: User = {
-			uid: user.uid,
-			email: user.email,
-			photoURL: user.photoURL,
-			displayName: user.displayName
+		const doc = await this.docExists(`users/${user.uid}`);
+		if(!doc) {
+			const userRef =  this.afs.doc(`users/${user.uid}`);
+
+			const data: User = {
+				uid: user.uid,
+				email: user.email,
+				photoURL: user.photoURL,
+				displayName: user.displayName
+			}
+
+			return userRef.set(data);
 		}
+	}
 
-		return userRef.set(data);
+	docExists(path: string) {
+		return this.afs.doc(path).valueChanges().pipe(first()).toPromise()
 	}
 }

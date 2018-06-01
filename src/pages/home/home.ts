@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, LoadingController, Loading } from 'ionic-angular';
 
 import { 
@@ -8,6 +8,7 @@ import {
 import { Observable } from 'rxjs/Observable';
 import { AuthService } from '../../services/auth.service';
 import { TodoModel } from '../../models/todo.model';
+import { User } from '../../models/user.model';
 
 /**
  * Generated class for the HomePage page.
@@ -21,11 +22,12 @@ import { TodoModel } from '../../models/todo.model';
   selector: 'page-home',
   templateUrl: 'home.html',
 })
-export class HomePage {
+export class HomePage implements OnInit {
   private todoCollection: AngularFirestoreCollection<TodoModel>;
   private todoDoc: AngularFirestoreDocument<TodoModel>;
   private loader: Loading;
   todos: Observable<TodoModel[]>;
+  user$: Observable<User>;
   
   constructor(
     public navCtrl: NavController, 
@@ -41,17 +43,25 @@ export class HomePage {
     this.retrieveTodos()
       .then(() => {
         this.dismissLoading();
-      });
+      }); 
   }
 
   async retrieveTodos(): Promise<void> {
     try {
       const user = await this.auth.isLoggedIn();
       if(user){
-        this.todoCollection = this.afs.collection('todos', ref => ref.where('userUid', '==', user.uid));
-        this.todos = this.todoCollection.valueChanges();
+        this.todoCollection = await this.afs.collection<TodoModel>('todos', ref => ref.where('userUid', '==', user.uid));
+        this.todos = await this.todoCollection.valueChanges();
       }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
+  async retrieveUserData(): Promise<void>{
+    try {
+      const user = await this.auth.isLoggedIn();
+      this.user$ = this.afs.doc<User>(`users/${user.uid}`).valueChanges();
     } catch (error) {
       console.error(error);
     }
@@ -114,5 +124,9 @@ export class HomePage {
 
   dismissLoading(){
     this.loader.dismiss();
+  }
+
+  ngOnInit(){
+    this.retrieveUserData();
   }
 }

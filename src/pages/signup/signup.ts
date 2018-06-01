@@ -56,7 +56,8 @@ export class SignUpPage {
     };
     
     this.auth.signUp(credentials)
-      .then(() => {
+      .then((data) => {
+        this.auth.updateUserData(data.user);
         this.navCtrl.setRoot('HomePage');
         this.menuCtrl.swipeEnable(true);
       });
