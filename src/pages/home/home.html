@@ -22,28 +22,60 @@
 
 
 <ion-content>
-  <ion-list>
-    <ion-item-sliding *ngFor="let todo of todos | async">
-      <ion-item>
-        <h2 [ngClass]="{'done': todo.done}">{{ todo.description }}</h2>
-        <p item-end class="deadline">{{ todo.deadline | date:'dd/MM/yyyy' }}</p>
-      </ion-item>
-      <ion-item-options side="right">
-        <button ion-button color="secondary" (click)="markAsDone(todo)">
-          <ion-icon name="done-all"></ion-icon>
-          Done
-        </button>
-        <button ion-button navPush="TodoEditPage" [navParams]="{ todo: todo }" color="primary">
-          <ion-icon name="create"></ion-icon>
-          Edit
-        </button>
-        <button ion-button (click)="showDeleteConfirm(todo)" color="danger">
+  <div padding>
+    <ion-segment [(ngModel)]="list">
+      <ion-segment-button value="todo">
+        To do
+      </ion-segment-button>
+      <ion-segment-button value="completed">
+        Completed
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+  
+  <div [ngSwitch]="list">
+    <ion-list *ngSwitchCase="'todo'">
+      <ion-item-sliding *ngFor="let todo of todos$ | async">
+        <ion-item>
+          <h2 [ngClass]="{'done': todo.done}">{{ todo.description }}</h2>
+          <p item-end class="deadline">{{ todo.deadline | date:'dd/MM/yyyy' }}</p>
+        </ion-item>
+        <ion-item-options side="right">
+          <button ion-button color="secondary" (click)="markAsDone(todo)">
+            <ion-icon name="done-all"></ion-icon>
+            Done
+          </button>
+          <button ion-button navPush="TodoEditPage" [navParams]="{ todo: todo }" color="primary">
+            <ion-icon name="create"></ion-icon>
+            Edit
+          </button>
+          <button ion-button (click)="showDeleteConfirm(todo)" color="danger">
             <ion-icon name="trash"></ion-icon>
             Delete
           </button>
-      </ion-item-options>
-    </ion-item-sliding>
-  </ion-list>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  
+    <ion-list *ngSwitchCase="'completed'">
+      <ion-item-sliding *ngFor="let todo of todosCompleted$ | async">
+        <ion-item>
+          <h2 [ngClass]="{'done': todo.done}">{{ todo.description }}</h2>
+          <p item-end class="deadline">{{ todo.deadline | date:'dd/MM/yyyy' }}</p>
+        </ion-item>
+        <ion-item-options side="right">
+          <button ion-button navPush="TodoEditPage" [navParams]="{ todo: todo }" color="primary">
+            <ion-icon name="create"></ion-icon>
+            Edit
+          </button>
+          <button ion-button (click)="showDeleteConfirm(todo)" color="danger">
+            <ion-icon name="trash"></ion-icon>
+            Delete
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  </div>
 
   <ion-fab right bottom>
       <button ion-fab (click)="goToEdit()"><ion-icon name="add"></ion-icon></button>

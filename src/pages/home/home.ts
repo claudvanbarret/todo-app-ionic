@@ -24,10 +24,13 @@ import { User } from '../../models/user.model';
 })
 export class HomePage implements OnInit {
   private todoCollection: AngularFirestoreCollection<TodoModel>;
+  private todoCompletedCollection: AngularFirestoreCollection<TodoModel>;
   private todoDoc: AngularFirestoreDocument<TodoModel>;
   private loader: Loading;
-  todos: Observable<TodoModel[]>;
+  todos$: Observable<TodoModel[]>;
+  todosCompleted$: Observable<TodoModel[]>;
   user$: Observable<User>;
+  list: string = 'todo';
   
   constructor(
     public navCtrl: NavController, 
@@ -40,6 +43,7 @@ export class HomePage implements OnInit {
 
   ionViewDidLoad(): void {
     this.presentLoading();
+    this.retrieveTodosCompleted();
     this.retrieveTodos()
       .then(() => {
         this.dismissLoading();
@@ -50,8 +54,25 @@ export class HomePage implements OnInit {
     try {
       const user = await this.auth.isLoggedIn();
       if(user){
-        this.todoCollection = await this.afs.collection<TodoModel>('todos', ref => ref.where('userUid', '==', user.uid));
-        this.todos = await this.todoCollection.valueChanges();
+        this.todoCollection = await this.afs.collection<TodoModel>('todos', 
+          ref => ref.where('userUid', '==', user.uid)
+                    .where('done', '==', false));
+        this.todos$ = await this.todoCollection.valueChanges();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async retrieveTodosCompleted(): Promise<void> {
+    try {
+      const user = await this.auth.isLoggedIn();
+      if(user){
+        this.todoCompletedCollection = await this.afs.collection<TodoModel>('todos', 
+          ref => ref.where('userUid', '==', user.uid)
+                    .where('done', '==', true));
+
+        this.todosCompleted$ = await this.todoCompletedCollection.valueChanges();
       }
     } catch (error) {
       console.error(error);
