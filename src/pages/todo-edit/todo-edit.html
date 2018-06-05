@@ -28,7 +28,9 @@
           <ion-datetime displayFormat="DD/MM/YYYY" pickerFormat="DD MM YYYY" [(ngModel)]="todo.deadline"></ion-datetime>
       </ion-item>
   </ion-list>
-  <button ion-button full (click)="save()">
-    Save
-  </button>
+  <div padding>
+    <button ion-button block (click)="save()">
+      Save
+    </button>
+  </div>
 </ion-content>
