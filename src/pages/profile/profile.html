@@ -15,7 +15,12 @@
 <ion-content padding>
   <div class="container-photo" *ngIf="user$ | async as user">
       <img class="profile-photo" [src]="user.photoURL" alt="profile photo">
-      <p class="profile-name">{{ user.displayName }}</p>
+      <div class="profile-name">
+        <p>{{ user.displayName }}</p>
+        <button class="edit-name-btn">
+            <ion-icon name="md-create"></ion-icon>
+        </button>
+      </div>
   </div>
   <div>
     <ion-grid>
