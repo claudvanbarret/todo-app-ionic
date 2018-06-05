@@ -31,6 +31,8 @@ export class HomePage implements OnInit {
   todosCompleted$: Observable<TodoModel[]>;
   user$: Observable<User>;
   list: string = 'todo';
+  todosLength: number;
+  todosCompletedLength: number;
   
   constructor(
     public navCtrl: NavController, 
@@ -57,7 +59,10 @@ export class HomePage implements OnInit {
         this.todoCollection = await this.afs.collection<TodoModel>('todos', 
           ref => ref.where('userUid', '==', user.uid)
                     .where('done', '==', false));
+
         this.todos$ = await this.todoCollection.valueChanges();
+        
+        this.todos$.subscribe(values => this.todosLength = values.length);
       }
     } catch (error) {
       console.error(error);
@@ -73,6 +78,8 @@ export class HomePage implements OnInit {
                     .where('done', '==', true));
 
         this.todosCompleted$ = await this.todoCompletedCollection.valueChanges();
+
+        this.todosCompleted$.subscribe(values => this.todosCompletedLength = values.length);
       }
     } catch (error) {
       console.error(error);
@@ -146,7 +153,7 @@ export class HomePage implements OnInit {
   dismissLoading(){
     this.loader.dismiss();
   }
-
+  
   ngOnInit(){
     this.retrieveUserData();
   }

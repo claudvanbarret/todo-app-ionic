@@ -11,7 +11,7 @@
     </button>
     <ion-title>Todo List</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only>
+      <button ion-button icon-only navPush="ProfilePage" [navParams]="{ todosLength: todosLength, todosCompletedLength: todosCompletedLength }">
         <div *ngIf="user$ | async as user">
           <img class="photo-profile" [src]="user.photoURL" alt="profile photo">
         </div>
