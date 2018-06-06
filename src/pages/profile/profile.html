@@ -16,22 +16,30 @@
   <div class="container-photo" *ngIf="user$ | async as user">
       <img class="profile-photo" [src]="user.photoURL" alt="profile photo">
       <div class="profile-name">
-        <p>{{ user.displayName }}</p>
-        <button class="edit-name-btn">
-            <ion-icon name="md-create"></ion-icon>
-        </button>
+        <div *ngIf="!editName">
+          <p class="display-name">{{ user.displayName }}</p>
+          <button (click)="editName = true">
+              <ion-icon name="md-create"></ion-icon>
+          </button>
+        </div>
+        <div *ngIf="editName">
+          <input class="input-name" type="text" [(ngModel)]="user.displayName" (keydown.enter)="updateName(user.displayName)"/>
+          <button (click)="updateName(user.displayName)" >
+              <ion-icon name="checkmark-circle"></ion-icon>
+          </button>
+        </div>
       </div>
   </div>
   <div>
     <ion-grid>
       <ion-row>
         <ion-col col-6 class="todos">
-         <p>{{ todosLength }}</p> 
+         <p>{{ todosLength }}</p>
          <p>To do</p>
         </ion-col>
         <ion-col col-6 class="dones">
           <p>{{ todosCompletedLength }}</p>
-          <p>Completed</p> 
+          <p>Completed</p>
         </ion-col>
       </ion-row>
     </ion-grid>

@@ -21,11 +21,13 @@ import { User } from '../../models/user.model';
 })
 export class ProfilePage implements OnInit {
   user$: Observable<User>;
-  private todosLength: number;
-  private todosCompletedLength: number;
+  todosLength: number;
+  todosCompletedLength: number;
+  editName: boolean = false;
+
 
   constructor(
-    public navCtrl: NavController, 
+    public navCtrl: NavController,
     public navParams: NavParams,
     private afs: AngularFirestore,
     private auth: AuthService) {
@@ -44,6 +46,22 @@ export class ProfilePage implements OnInit {
       console.error(error);
     }
   }
+
+  async updateName(name: string){
+    console.log(name);
+    try {
+      const user = await this.auth.isLoggedIn();
+
+      this.afs.doc<User>(`users/${user.uid}`)
+          .update({'displayName': name})
+          .then(() => {
+            this.editName = false;
+          });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   ngOnInit(){
     this.retrieveUserData();
   }

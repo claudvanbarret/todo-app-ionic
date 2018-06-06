@@ -11,14 +11,14 @@ page-profile {
     border-radius: 50px
 }
 
-.profile-name {
-    font-size: 16px;
+.profile-name div {
+    font-size: 18px;
     display: flex;
     justify-content: center;
 }
 
-.edit-name-btn {
-    background-color: transparent;
+.profile-name button {
+  background-color: transparent;
 }
 
 .todos {
@@ -29,4 +29,16 @@ page-profile {
 
 .dones {
     text-align: center;
+}
+
+.input-name {
+  text-align: center;
+  margin: 4px;
+  border-color: #2c3e50;
+  border-style: double;
+  border-width: 0px 0px 1px 0px
+}
+
+.display-name{
+  margin: 4px;
 }
