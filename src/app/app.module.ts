@@ -13,6 +13,7 @@ import { MyApp } from './app.component';
 import { LoginPage } from '../pages/login/login';
 import { CategoryPage } from '../pages/category/category';
 import { AuthService } from '../services/auth.service';
+import { ToastService } from '../services/toast.service';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { AuthService } from '../services/auth.service';
     StatusBar,
     SplashScreen,
     AuthService,
+    ToastService,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
