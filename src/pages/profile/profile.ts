@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 
 import { AuthService } from '../../services/auth.service';
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -29,6 +29,7 @@ export class ProfilePage implements OnInit {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    private toastCtrl: ToastController,
     private afs: AngularFirestore,
     private auth: AuthService) {
   }
@@ -55,11 +56,22 @@ export class ProfilePage implements OnInit {
       this.afs.doc<User>(`users/${user.uid}`)
           .update({'displayName': name})
           .then(() => {
+            this.presentToast('The name has been successfully updated.')
             this.editName = false;
           });
     } catch (error) {
       console.error(error);
     }
+  }
+
+  presentToast(message) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      position: 'top',
+      cssClass: 'toast'
+    });
+    toast.present();
   }
 
   ngOnInit(){
