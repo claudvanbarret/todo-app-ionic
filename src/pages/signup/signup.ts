@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
 
 import { AuthService } from '../../services/auth.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ToastService } from '../../services/toast.service';
 
 /**
  * Generated class for the SignUpPage page.
@@ -25,7 +26,7 @@ export class SignUpPage {
     private fb: FormBuilder,
     private auth: AuthService,
     private menuCtrl: MenuController,
-    private toastCtrl: ToastController,
+    private toastService: ToastService,
   ) { }
 
   ionViewWillLoad(): void {
@@ -47,7 +48,7 @@ export class SignUpPage {
   signUp() {
     let data = this.signUpForm.value;
     if(data.password !== data.confirmPassword) {
-      this.presentToast("The passwords you entered don't match");
+      this.toastService.create("The passwords you entered don't match");
       return;
     }
 		let credentials = {
@@ -62,15 +63,4 @@ export class SignUpPage {
         this.menuCtrl.swipeEnable(true);
       });
   }
-
-  presentToast(message) {
-    let toast = this.toastCtrl.create({
-      message: message,
-      duration: 3000,
-      position: 'top',
-      cssClass: 'toast'
-    });
-    toast.present();
-  }
-
 }

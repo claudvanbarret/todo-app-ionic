@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
-
-import { AuthService } from '../../services/auth.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { ToastController } from 'ionic-angular';
+import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 /**
  * Generated class for the LoginPage page.
@@ -32,7 +31,7 @@ export class LoginPage {
     public navParams: NavParams, 
     private auth: AuthService,
     private fb: FormBuilder,
-    private toastCtrl: ToastController,
+    private toastService: ToastService,
     private menuCtrl: MenuController
   ) { }
 
@@ -70,22 +69,12 @@ export class LoginPage {
         this.menuCtrl.swipeEnable(true);
       })
       .catch(error => {
-        this.presentToast(error.message);
+        this.toastService.create(error.message);
       });
   }
 
   goToSignUpPage(){
     this.navCtrl.push('SignUpPage');
-  }
-
-  presentToast(message) {
-    let toast = this.toastCtrl.create({
-      message: message,
-      duration: 3000,
-      position: 'top',
-      cssClass: 'toast'
-    });
-    toast.present();
   }
 
   showHidePassword(){
