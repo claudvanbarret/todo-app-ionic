@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import { AuthService } from '../../services/auth.service';
 import { TodoModel } from '../../models/todo.model';
 import { User } from '../../models/user.model';
+import { DatePipe } from '@angular/common';
 
 /**
  * Generated class for the HomePage page.
@@ -25,12 +26,14 @@ import { User } from '../../models/user.model';
 export class HomePage implements OnInit {
   private todoCollection: AngularFirestoreCollection<TodoModel>;
   private todoCompletedCollection: AngularFirestoreCollection<TodoModel>;
+  private todoTodayCollection: AngularFirestoreCollection<TodoModel>;
   private todoDoc: AngularFirestoreDocument<TodoModel>;
   private loader: Loading;
   todos$: Observable<TodoModel[]>;
   todosCompleted$: Observable<TodoModel[]>;
+  todosToday$: Observable<TodoModel[]>;
   user$: Observable<User>;
-  list: string = 'todo';
+  list: string;
   todosLength: number;
   todosCompletedLength: number;
   
@@ -40,12 +43,12 @@ export class HomePage implements OnInit {
     private afs: AngularFirestore,
     public alertCtrl: AlertController,
     private auth: AuthService,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    private datePipe: DatePipe  
   ) { }
 
   ionViewDidLoad(): void {
     this.presentLoading();
-    this.retrieveTodosCompleted();
     this.retrieveTodos()
       .then(() => {
         this.dismissLoading();
@@ -62,24 +65,23 @@ export class HomePage implements OnInit {
 
         this.todos$ = await this.todoCollection.valueChanges();
         
-        this.todos$.subscribe(values => this.todosLength = values.length);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
+        // this.todos$.subscribe(values => this.todosLength = values.length);
 
-  async retrieveTodosCompleted(): Promise<void> {
-    try {
-      const user = await this.auth.isLoggedIn();
-      if(user){
         this.todoCompletedCollection = await this.afs.collection<TodoModel>('todos', 
           ref => ref.where('userUid', '==', user.uid)
                     .where('done', '==', true));
 
         this.todosCompleted$ = await this.todoCompletedCollection.valueChanges();
 
-        this.todosCompleted$.subscribe(values => this.todosCompletedLength = values.length);
+        // this.todosCompleted$.subscribe(values => this.todosCompletedLength = values.length);
+
+        let today = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+        this.todoTodayCollection = await this.afs.collection<TodoModel>('todos', 
+          ref => ref.where('userUid', '==', user.uid)
+                    .where('done', '==', false)
+                    .where('deadline', '==', today));
+
+        this.todosToday$ = this.todoTodayCollection.valueChanges();
       }
     } catch (error) {
       console.error(error);
@@ -155,6 +157,9 @@ export class HomePage implements OnInit {
   }
   
   ngOnInit(){
+    this.list = 'today';
+    this.todosLength = 0;
+    this.todosCompletedLength = 0;
     this.retrieveUserData();
   }
 }

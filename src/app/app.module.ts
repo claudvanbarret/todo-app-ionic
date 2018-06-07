@@ -14,6 +14,7 @@ import { LoginPage } from '../pages/login/login';
 import { CategoryPage } from '../pages/category/category';
 import { AuthService } from '../services/auth.service';
 import { ToastService } from '../services/toast.service';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ToastService } from '../services/toast.service';
     SplashScreen,
     AuthService,
     ToastService,
+    DatePipe,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

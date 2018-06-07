@@ -24,6 +24,9 @@
 <ion-content>
   <div padding>
     <ion-segment [(ngModel)]="list">
+      <ion-segment-button value="today">
+        Today
+      </ion-segment-button>
       <ion-segment-button value="todo">
         To do
       </ion-segment-button>
@@ -32,8 +35,33 @@
       </ion-segment-button>
     </ion-segment>
   </div>
-  
+
   <div [ngSwitch]="list">
+    <ion-list *ngSwitchCase="'today'">
+      <div *ngIf="todosToday$ | async as todosToday; else empty">
+        <ion-item-sliding *ngFor="let todo of todosToday">
+          <ion-item>
+            <h2 [ngClass]="{'done': todo.done}">{{ todo.description }}</h2>
+            <p item-end class="deadline">{{ todo.deadline | date:'dd/MM/yyyy' }}</p>
+          </ion-item>
+          <ion-item-options side="right">
+            <button ion-button color="secondary" (click)="markAsDone(todo)">
+              <ion-icon name="done-all"></ion-icon>
+              Done
+            </button>
+            <button ion-button navPush="TodoEditPage" [navParams]="{ todo: todo }" color="primary">
+              <ion-icon name="create"></ion-icon>
+              Edit
+            </button>
+            <button ion-button (click)="showDeleteConfirm(todo)" color="danger">
+              <ion-icon name="trash"></ion-icon>
+              Delete
+            </button>
+          </ion-item-options>
+        </ion-item-sliding> 
+      </div>
+    </ion-list>
+
     <ion-list *ngSwitchCase="'todo'">
       <ion-item-sliding *ngFor="let todo of todos$ | async">
         <ion-item>
@@ -82,3 +110,7 @@
   </ion-fab>
   
 </ion-content>
+
+<ng-template #empty>
+  <p class="empty-list">You have nothing to do today.</p>
+</ng-template>
