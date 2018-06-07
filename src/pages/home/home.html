@@ -20,7 +20,6 @@
   </ion-navbar>
 </ion-header>
 
-
 <ion-content>
   <div padding>
     <ion-segment [(ngModel)]="list">
@@ -38,79 +37,33 @@
 
   <div [ngSwitch]="list">
     <ion-list *ngSwitchCase="'today'">
-      <div *ngIf="todosToday$ | async as todosToday; else empty">
-        <ion-item-sliding *ngFor="let todo of todosToday">
-          <ion-item>
-            <h2 [ngClass]="{'done': todo.done}">{{ todo.description }}</h2>
-            <p item-end class="deadline">{{ todo.deadline | date:'dd/MM/yyyy' }}</p>
-          </ion-item>
-          <ion-item-options side="right">
-            <button ion-button color="secondary" (click)="markAsDone(todo)">
-              <ion-icon name="done-all"></ion-icon>
-              Done
-            </button>
-            <button ion-button navPush="TodoEditPage" [navParams]="{ todo: todo }" color="primary">
-              <ion-icon name="create"></ion-icon>
-              Edit
-            </button>
-            <button ion-button (click)="showDeleteConfirm(todo)" color="danger">
-              <ion-icon name="trash"></ion-icon>
-              Delete
-            </button>
-          </ion-item-options>
-        </ion-item-sliding> 
-      </div>
+      <todo-list 
+        [showButtonDone]="true" 
+        [done]="false" 
+        [deadline]="today"
+        messageEmpty="You have nothing to do today.">
+      </todo-list>
     </ion-list>
 
     <ion-list *ngSwitchCase="'todo'">
-      <ion-item-sliding *ngFor="let todo of todos$ | async">
-        <ion-item>
-          <h2 [ngClass]="{'done': todo.done}">{{ todo.description }}</h2>
-          <p item-end class="deadline">{{ todo.deadline | date:'dd/MM/yyyy' }}</p>
-        </ion-item>
-        <ion-item-options side="right">
-          <button ion-button color="secondary" (click)="markAsDone(todo)">
-            <ion-icon name="done-all"></ion-icon>
-            Done
-          </button>
-          <button ion-button navPush="TodoEditPage" [navParams]="{ todo: todo }" color="primary">
-            <ion-icon name="create"></ion-icon>
-            Edit
-          </button>
-          <button ion-button (click)="showDeleteConfirm(todo)" color="danger">
-            <ion-icon name="trash"></ion-icon>
-            Delete
-          </button>
-        </ion-item-options>
-      </ion-item-sliding>
+      <todo-list 
+        [showButtonDone]="true" 
+        [done]="false" 
+        messageEmpty="You have nothing to do.">
+      </todo-list>
     </ion-list>
   
     <ion-list *ngSwitchCase="'completed'">
-      <ion-item-sliding *ngFor="let todo of todosCompleted$ | async">
-        <ion-item>
-          <h2 [ngClass]="{'done': todo.done}">{{ todo.description }}</h2>
-          <p item-end class="deadline">{{ todo.deadline | date:'dd/MM/yyyy' }}</p>
-        </ion-item>
-        <ion-item-options side="right">
-          <button ion-button navPush="TodoEditPage" [navParams]="{ todo: todo }" color="primary">
-            <ion-icon name="create"></ion-icon>
-            Edit
-          </button>
-          <button ion-button (click)="showDeleteConfirm(todo)" color="danger">
-            <ion-icon name="trash"></ion-icon>
-            Delete
-          </button>
-        </ion-item-options>
-      </ion-item-sliding>
+        <todo-list 
+          [showButtonDone]="false" 
+          [done]="true" 
+          messageEmpty="You have nothing to do completed.">
+        </todo-list>
     </ion-list>
   </div>
 
   <ion-fab right bottom>
-      <button ion-fab (click)="goToEdit()"><ion-icon name="add"></ion-icon></button>
+      <button ion-fab navPush="TodoEditPage"><ion-icon name="add"></ion-icon></button>
   </ion-fab>
   
 </ion-content>
-
-<ng-template #empty>
-  <p class="empty-list">You have nothing to do today.</p>
-</ng-template>
