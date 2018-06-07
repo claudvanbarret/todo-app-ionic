@@ -1,0 +1,27 @@
+<!-- Generated template for the TodoListComponent component -->
+<div *ngIf="todos$ | async as todos; else empty">
+  <ion-item-sliding *ngFor="let todo of todos">
+    <ion-item>
+      <h2 [ngClass]="{'done': todo.done}">{{ todo.description }}</h2>
+      <p item-end class="deadline">{{ todo.deadline | date:'dd/MM/yyyy' }}</p>
+    </ion-item>
+    <ion-item-options side="right">
+      <button *ngIf="showButtonDone" ion-button color="secondary" (click)="markAsDone(todo)">
+        <ion-icon name="done-all"></ion-icon>
+        Done
+      </button>
+      <button ion-button navPush="TodoEditPage" [navParams]="{ todo: todo }" color="primary">
+        <ion-icon name="create"></ion-icon>
+        Edit
+      </button>
+      <button ion-button (click)="showDeleteConfirm(todo)" color="danger">
+        <ion-icon name="trash"></ion-icon>
+        Delete
+      </button>
+    </ion-item-options>
+  </ion-item-sliding>
+</div>
+
+<ng-template #empty>
+  <p class="empty-list">{{ messageEmpty }}</p>
+</ng-template>
