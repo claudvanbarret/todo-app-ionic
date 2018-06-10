@@ -41,7 +41,9 @@ export class AuthService {
 				uid: user.uid,
 				email: user.email,
 				photoURL: user.photoURL,
-				displayName: user.displayName
+				displayName: user.displayName,
+				numberOfTodos: 0,
+				numberOfTodosCompleted: 0
 			}
 
 			return userRef.set(data);

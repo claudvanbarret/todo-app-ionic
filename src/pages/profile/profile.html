@@ -29,19 +29,19 @@
           </button>
         </div>
       </div>
-  </div>
-  <div>
-    <ion-grid>
-      <ion-row>
-        <ion-col col-6 class="todos">
-         <p>{{ todosLength }}</p>
-         <p>To do</p>
-        </ion-col>
-        <ion-col col-6 class="dones">
-          <p>{{ todosCompletedLength }}</p>
-          <p>Completed</p>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+      <div>
+        <ion-grid>
+          <ion-row>
+            <ion-col col-6 class="todos">
+             <p>{{ user.numberOfTodos }}</p>
+             <p>To do</p>
+            </ion-col>
+            <ion-col col-6 class="dones">
+              <p>{{ user.numberOfTodosCompleted }}</p>
+              <p>Completed</p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
   </div>
 </ion-content>

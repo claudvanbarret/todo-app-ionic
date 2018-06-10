@@ -38,8 +38,7 @@ export class ProfilePage implements OnInit {
   }
 
   ionViewDidLoad() {
-    this.todosLength = this.navParams.get('todosLength');
-    this.todosCompletedLength = this.navParams.get('todosCompletedLength');
+    
   }
 
   async retrieveUserData(): Promise<void>{
