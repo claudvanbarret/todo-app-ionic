@@ -15,6 +15,7 @@ import { CategoryPage } from '../pages/category/category';
 import { AuthService } from '../services/auth.service';
 import { ToastService } from '../services/toast.service';
 import { DatePipe } from '@angular/common';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { DatePipe } from '@angular/common';
     AuthService,
     ToastService,
     DatePipe,
+    LocalNotifications,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
