@@ -16,8 +16,15 @@ export class AuthService {
 	}
 
 	signInWithEmail(credentials) {
-		return this.afAuth.auth.signInWithEmailAndPassword(credentials.email, credentials.password);
-  }
+		return firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+			.then(function() {
+				return firebase.auth().signInWithEmailAndPassword(credentials.email, credentials.password);
+			})
+			.catch(function(error) {
+				var errorCode = error.code;
+				var errorMessage = error.message;
+			});
+	}
     
   	signUp(credentials){
     	return this.afAuth.auth.createUserWithEmailAndPassword(credentials.email, credentials.password);
