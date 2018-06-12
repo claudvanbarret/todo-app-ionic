@@ -48,6 +48,15 @@ export class LoginPage {
     this.menuCtrl.swipeEnable(false);
   }
 
+  ionViewCanEnter(){
+    this.auth.isLoggedIn()
+      .then(user => {
+        return user ? this.navCtrl.setRoot('HomePage') : true;
+      }).catch(error => {
+        return true;
+      });
+  }
+
   createFormLogin(){
     this.loginForm = this.fb.group({
 			email: ['', Validators.compose([Validators.required, Validators.email])],
@@ -60,9 +69,9 @@ export class LoginPage {
 
     let credentials = {
 			email: data.email,
-			password: data.password
-		};
-    
+      password: data.password
+    };
+
     this.auth.signInWithEmail(credentials)
       .then(res => { 
         this.navCtrl.setRoot('HomePage');
