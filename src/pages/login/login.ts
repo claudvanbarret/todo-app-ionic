@@ -48,13 +48,22 @@ export class LoginPage {
     this.menuCtrl.swipeEnable(false);
   }
 
-  ionViewCanEnter(){
-    this.auth.isLoggedIn()
+  isAuthenticated(nav: NavController): boolean | Promise<any>  {
+    return this.auth.isLoggedIn()
       .then(user => {
-        return user ? this.navCtrl.setRoot('HomePage') : true;
+        if(user){
+          setTimeout(() => { nav.setRoot('HomePage') }, 0);
+          return false;
+        } else {
+          return true;
+        }
       }).catch(error => {
         return true;
       });
+  }
+
+  ionViewCanEnter(){
+    return this.isAuthenticated(this.navCtrl);
   }
 
   createFormLogin(){
